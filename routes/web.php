@@ -24,16 +24,5 @@ Route::get('/', function () {
 
 Route::prefix('administrator')->group(function () {
     Route::get('/', 'Backend\MainController@mainPage');
-    Route::resource('categories', 'Backend\CategoryController');
-    Route::get('/categories/{id}/settings', 'Backend\CategoryController@indexSetting')->name('categories.indexSetting');
-    Route::post('/categories/{id}/settings', 'Backend\CategoryController@saveSetting');
-    Route::resource('attributes-group', 'Backend\AttributeGroupController');
-    Route::resource('attributes-value', 'Backend\AttributeValueController');
-    Route::resource('brands', 'Backend\BrandController');
-    Route::resource('photos', 'Backend\PhotoController');
-    Route::post('photos/upload', 'Backend\PhotoController@upload')->name('photos.upload');
-    Route::resource('products', 'Backend\ProductController');
-    Route::resource('coupons', 'Backend\CouponController');
-    Route::get('orders', 'Backend\OrderController@index');
-    Route::get('orders/lists/{id}', 'Backend\OrderController@getOrderLists')->name('orders.lists');
+    Route::resource('categories','Backend\CategoryController');
 });
