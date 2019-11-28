@@ -15,8 +15,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+//        $categories = Category::all();
 //        $categories = Category::paginate(10);
+        $categories = Category::with('childrenRecursive')
+            ->where('parent_id',null)->get();
         return view('admin.categories.index',compact(['categories']));
     }
 
@@ -27,7 +29,9 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
+        $categories = Category::with('childrenRecursive')
+            ->where('parent_id',null)
+            ->get();
 //        $categories = Category::paginate(10);
         return view('admin.categories.create',compact(['categories']));
 
@@ -41,7 +45,15 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        return $request->all();
+        $category = new Category();
+        $category->name = $request->input('name');
+        $category->parent_id = $request->input('category_parent');
+        $category->meta_title = $request->input('meta_title');
+        $category->meta_desc = $request->input('meta_desc');
+        $category->meta_keywords = $request->input('meta_keywords');
+        $category->save();
+
+        return redirect('administrator/categories');
     }
 
     /**
