@@ -26,4 +26,5 @@ Route::prefix('administrator')->group(function () {
     Route::get('/', 'Backend\MainController@mainPage');
     Route::resource('categories','Backend\CategoryController');
     Route::resource('attributes-group','Backend\AttributeGroupController');
+    Route::resource('attributes-value','Backend\AttributesValueController');
 });

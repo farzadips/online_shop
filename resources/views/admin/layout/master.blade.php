@@ -392,6 +392,18 @@
 
                 <li class="treeview">
                     <a href="#">
+                        <i class="fa fa-pie-chart"></i>
+                        <span>مقادیر ویژگی ها </span>
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="{{route('attributes-value.index')}}"><i class="fa fa-circle-o"></i>لیست ویژگی </a></li>
+
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#">
                         <i class="fa fa-edit"></i> <span>فرم ها</span>
                         <i class="fa fa-angle-left pull-right"></i>
                     </a>
