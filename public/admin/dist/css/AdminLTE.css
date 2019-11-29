@@ -4919,3 +4919,6 @@ table.text-center th {
     white-space: normal !important;
   }
 }
+.display-inline-block{
+    display: inline-block; !important;
+}

@@ -6,9 +6,17 @@
         <td class="text-center">
             <a class="btn btn-warning"
                href="{{route('categories.edit',$sub_category->id)}}">ویرایش</a>
-            <a class="btn btn-danger"
-               href="{{route('categories.destroy',$sub_category->id)}}">حذف</a>
-        </td>
+            <div class="display-inline-block">
+                <form method="post" action="/administrator/categories/{{$sub_category->id}}">
+                    @csrf
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button
+                        type="submit"
+                        class="btn btn-danger"
+                    >حذف
+                    </button>
+                </form>
+            </div></td>
     </tr>
 
     @if(count($category->childrenRecursive) > 0)

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class CategoryController extends Controller
 {
@@ -75,7 +76,12 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $categories = Category::with('childrenRecursive')
+            ->where('parent_id',null)
+            ->get();
+        $category = Category::findOrFail($id);
+        return view('admin.categories.edit',compact(['categories','category']));
+
     }
 
     /**
@@ -87,7 +93,16 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $category = Category::findOrFail($id);
+        $category->name = $request->input('name');
+        $category->parent_id = $request->input('category_parent');
+        $category->meta_title = $request->input('meta_title');
+        $category->meta_desc = $request->input('meta_desc');
+        $category->meta_keywords = $request->input('meta_keywords');
+        $category->save();
+
+        return redirect('administrator/categories');
+
     }
 
     /**
@@ -98,6 +113,13 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $category = Category::with('childrenRecursive')->where('id',$id)->first();
+        if (count($category->childrenRecursive)>0){
+            Session::flash('error_category',' دسته بندی '. $category->name .'  دارای زیر دسته است پس امکان پذیر نیست ');
+            return redirect('/administrator/categories');
+        }
+
+        $category->delete();
+        return redirect('/administrator/categories');
     }
 }
