@@ -20,7 +20,8 @@
 
                             <div class="form-group">
                                 <label for="name">تصویر برند</label>
-                                <img src="{{$brand->photo->path}}">
+                                <img src="{{$brand->photo->path}}"
+                                style="height: 150px; width: 150px">
                             </div>
 
                             <div class="form-group">

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Validator;
+
 class BrandController extends Controller
 {
     /**
@@ -17,7 +18,7 @@ class BrandController extends Controller
     public function index()
     {
         $brands = Brand::all();
-        return view('admin.brands.index',compact(['brands']));
+        return view('admin.brands.index', compact(['brands']));
 
     }
 
@@ -34,7 +35,7 @@ class BrandController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -42,15 +43,15 @@ class BrandController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|unique:brands',
             'description' => 'required'
-        ],[
+        ], [
             'title.required' => 'عنوان برند شما باید درج شود',
             'title.unique' => 'این برند قبلا ثبت شده است',
             'description.required' => 'توضیحات خود را وارد کنید'
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return redirect('/administrator/brands')->withErrors($validator)->withInput();
-        }else{
+        } else {
             $brand = new Brand();
             $brand->title = $request->input('title');
             $brand->description = $request->input('description');
@@ -66,7 +67,7 @@ class BrandController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -77,34 +78,63 @@ class BrandController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        //
+        $brand = Brand::with('photo')->
+        whereId($id)->first();
+        return view('admin.brands.edit', compact(['brand']));
+
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|unique:brands,title,' . $id, /*baraye sotun title in id ra ignore mikonad*/
+            'description' => 'required'
+        ], [
+            'title.required' => 'عنوان برند شما باید درج شود',
+            'title.unique' => 'این برند قبلا ثبت شده است',
+            'description.required' => 'توضیحات خود را وارد کنید'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('/administrator/brands')->withErrors($validator)->withInput();
+        } else {
+            $brand = Brand::findOrFail($id);
+            $brand->title = $request->input('title');
+            $brand->description = $request->input('description');
+            $brand->photo_id = $request->input('photo_id');
+            $brand->save();
+
+            Session::flash('success', 'برند با موفقیت ویرایش شد');
+            return redirect('/administrator/brands');
+            redirect('administrator/categories');
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        $brand = Brand::findOrFail($id);
+
+        $brand->delete();
+        Session::flash('success',' برند '. $brand->name .' حذف شد ');
+        return redirect('/administrator/brands');
+
     }
 }

@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Photo;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
-class PhotoController extends Controller
+class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -36,30 +33,11 @@ class PhotoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function upload(Request $request)
+    public function store(Request $request)
     {
-        $uploadedFile = $request->file('file');
-        $filename = time().$uploadedFile->getClientOriginalName();
-        $original_name = $uploadedFile->getClientOriginalName();
-
-        Storage::disk('local')->putFileAs(
-          'public/photos', $uploadedFile, $filename
-        );
-
-        $photo = new Photo();
-        $photo->original_name = $original_name;
-        $photo->path = $filename;
-//        $photo->user_id = Auth::user()->id;
-        $photo->user_id = 1;
-        $photo->save();
-
-        return response()->json([
-          'photo_id' => $photo->id
-        ]);
+        //
     }
-    public function store(Request $request){
 
-    }
     /**
      * Display the specified resource.
      *
